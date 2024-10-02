@@ -1,0 +1,31 @@
+<div class="container">
+
+    <div  class="space">
+        <h2>About Me</h2>
+        <p>
+            I'm a passionate full stack web developer focusing on creating clean, modern, and user-friendly websites...
+        </p> 
+    </div> 
+
+    <div  class="space">
+        <h2>Skills</h2>
+        <p>{{ displaySkillList()}}</p>  
+    </div> 
+
+    <div  class="space">
+        <h2>Experience</h2>
+        @for (job of experienceList; track $index) {
+            <p class="title">{{ job.title }} - ({{ job.date }})</p>
+            @for (description of job.descriptions; track $index) {
+                <p>{{ description.description}}</p>
+            }   
+        }  
+    </div> 
+
+    <div  class="space">
+        <h2>Education</h2>
+        @for (education of educationList; track $index) {
+            <p>{{education.description}} - {{education.data}}</p>
+        }  
+    </div> 
+</div>

@@ -1,0 +1,17 @@
+mat-toolbar {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  background: linear-gradient(45deg, #00ccff, #3333ff); 
+  height: 50px;
+}
+
+nav a {
+  color: #ffffff;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-left: 20px;
+}

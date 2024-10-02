@@ -25,3 +25,17 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Installations
+ng add @angular/material
+npm install @fortawesome/angular-fontawesome @fortawesome/free-brands-svg-icons
+npm install @fortawesome/angular-fontawesome @fortawesome/free-solid-svg-icons
+npm install @fortawesome/free-brands-svg-icons
+npm i moment --ipzionale
+npm i @anglar/material-moment-adapter --ipzionale
+
+
+# Production
+ng build --configuration production 
+
+

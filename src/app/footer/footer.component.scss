@@ -1,0 +1,23 @@
+footer { 
+  padding: 15px;
+  background-color: #111;
+  color: #ccc;
+  position: sticky;
+  position: -webkit-sticky;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  
+  p {
+    font-size: 0.9rem;
+    margin: 0px;
+  } 
+} 
+
+.icon-container{
+  a{
+    color: #0a66c2; 
+    margin-right: 40px; 
+  }    
+}  

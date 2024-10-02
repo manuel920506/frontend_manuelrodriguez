@@ -1,0 +1,27 @@
+<div mat-dialog-title>
+    Login
+</div>
+<div  mat-dialog-content>
+    <form>
+        <mat-form-field appearance="fill">
+            <mat-label>User</mat-label>
+            <input matInput [(ngModel)]="user" name="user">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput [(ngModel)]="password" name="password" [type]="hidePassword ? 'password' : 'text'">
+            <button 
+                mat-icon-button 
+                matSuffix 
+                (click)="togglePasswordVisibility()" 
+                [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+            >
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions> 
+    <button  mat-raised-button color="primary" (click)="onLogin()" cdkFocusInitial [disabled]="!user || !password">Salva</button>
+    <button mat-flat-button mat-dialog-close>Chiudi</button>
+</div>
