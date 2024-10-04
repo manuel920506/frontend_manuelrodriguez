@@ -1,3 +1,5 @@
+@import '../../styles.scss';
+
 mat-toolbar {
   position: sticky;
   position: -webkit-sticky;
@@ -10,7 +12,7 @@ mat-toolbar {
 }
 
 nav a {
-  color: #ffffff;
+  color: $a2color;
   text-transform: uppercase;
   font-weight: bold;
   margin-left: 20px;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core'; 
+import { Component, HostListener, OnInit } from '@angular/core';  
 
 @Component({
   selector: 'app-home',
@@ -10,7 +10,24 @@ import { Component } from '@angular/core';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent  implements OnInit {
+  isDesktop: boolean = false;
+  isPhone: boolean = false;
+  containerClass!: string;
+
+  ngOnInit(): void {
+    this.setContainerClass(window.innerWidth);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.setContainerClass(window.innerWidth);
+  }
+
+  setContainerClass(width: number) {
+    this.containerClass = width < 768 ? 'mobile-container' : 'desktop-container';
+  }
+
   educationList = [
     {description: 'Master AZ-104-Microsoft Azure Administrator(Remote) , Neural Academy', data: '2024'},
     {description: 'Master Data Science(Remote) , Neural Academy', data: '2022 – 2023'},
@@ -41,27 +58,28 @@ export class HomeComponent {
     'Framework .NET MVC',
     'SPRING.NET' ,
     'NUnit', 
-    'vb.net',
-    'sql server',
+    'Vb.net',
+    'Sql server',
     'NHibernate .net',
     'Entity Framework', 
     'Maven 3.8.4', 
     'Java JDK 17', 
-    'Eclipse', 
     'Spring Tools 4', 
-    'MapStruct,',
+    'MapStruct',
     'Lombok', 
-    'html', 
-    'javascript', 
-    'typescript', 
+    'Python',
+    'Html', 
+    'Javascript', 
+    'Typescript', 
+    'Angular 18',
     'Ext JS', 
     'React', 
     'Redux', 
     'Knockoutjs', 
-    'jquery', 
-    'bootstrap', 
-    'material',
-    'ccs'
+    'Jquery', 
+    'Bootstrap', 
+    'Material',
+    'CCS'
   ];
 
   displaySkillList() : string{

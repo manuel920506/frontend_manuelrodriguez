@@ -40,5 +40,6 @@ export class LoginComponent {
   }
   onLogin(){
     console.log(`OnLogin -User: ${this.user}  password: ${this.password}`);
+    console.log('Pagina in costruzione, login non effettivamente sviluppato lato backend');
   }
 }
