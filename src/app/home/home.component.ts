@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';  
+import { Component } from '@angular/core';  
 
 @Component({
   selector: 'app-home',
@@ -10,24 +10,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent  implements OnInit {
-  isDesktop: boolean = false;
-  isPhone: boolean = false;
-  containerClass!: string;
-
-  ngOnInit(): void {
-    this.setContainerClass(window.innerWidth);
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.setContainerClass(window.innerWidth);
-  }
-
-  setContainerClass(width: number) {
-    this.containerClass = width < 768 ? 'mobile-container' : 'desktop-container';
-  }
-
+export class HomeComponent { 
   educationList = [
     {description: 'Master AZ-104-Microsoft Azure Administrator(Remote) , Neural Academy', data: '2024'},
     {description: 'Master Data Science(Remote) , Neural Academy', data: '2022 – 2023'},
