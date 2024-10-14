@@ -1,0 +1,16 @@
+{
+  "runtime": "Net80",
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "https://localhost:7036/swagger/v1/swagger.json",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "openApiToTypeScriptClient": {
+      "className": "MyApiClient",
+      "output": "src/app/models/api-client.ts",
+      "template": "fetch"
+    }
+  }
+}

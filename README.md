@@ -8,7 +8,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 
 ## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module|environments`.
 
 ## Build
 
@@ -33,9 +33,16 @@ npm install @fortawesome/angular-fontawesome @fortawesome/free-solid-svg-icons
 npm install @fortawesome/free-brands-svg-icons
 npm i moment --ipzionale
 npm i @anglar/material-moment-adapter --ipzionale
+npm install nswag
+
+## using nswag
+ npx nswag run nswag.json
+
 
 
 # Production
 ng build --configuration production 
+
+
 
 

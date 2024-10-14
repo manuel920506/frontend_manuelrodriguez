@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';  
+import {LearningExperienceDTO} from '../models/api-client'
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,7 @@ import { Component } from '@angular/core';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent { 
+  _experienceList: LearningExperienceDTO[] = [];
   educationList = [
     {description: 'Master AZ-104-Microsoft Azure Administrator(Remote) , Neural Academy', data: '2024'},
     {description: 'Master Data Science(Remote) , Neural Academy', data: '2022 – 2023'},
@@ -67,5 +69,5 @@ export class HomeComponent {
 
   displaySkillList() : string{
     return this.skillList.join(", ");
-  }
+  } 
 }
