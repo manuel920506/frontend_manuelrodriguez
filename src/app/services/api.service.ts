@@ -1,22 +1,25 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpResponse , withInterceptorsFromDi } from '@angular/common/http';  
-import { Observable } from 'rxjs';
-import { LearningExperienceDTO, LearningExperienceListQueryDTO, SortDirection } from '../models/api-client'; 
+import { LearningExperienceDTO, LearningExperienceListQueryDTO } from '../models/api-client'; 
 import { environment } from '../../environments/environment'; 
+import { LoadingService } from '../loading/loading.service';
+import { HttpClient } from '@angular/common/http';  
+import { Injectable } from '@angular/core'; 
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LearningExperienceService {  
-  private http = inject(HttpClient);
-  private readonly urlBase = environment.apiURL + '/LearningExperience';
+export class LearningExperienceService {   
+  private readonly urlBase = environment.apiURL + '/LearningExperience'; 
 
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    private loadingService: LoadingService
+  ) {}
 
   getAllLearningExperience(params: LearningExperienceListQueryDTO): Observable<LearningExperienceDTO[]> {
+    this.loadingService.show();
     let param = new LearningExperienceListQueryDTO({
-        sortDirection: SortDirection._0, // Asc
-        sortExpression: 'title',
         pageIndex: 1,
         pageSize: 25
     });
@@ -34,8 +37,16 @@ export class LearningExperienceService {
     }
     if (params.description) {
       param.description = params.description;
-    }
+    } 
 
-    return this.http.post<LearningExperienceDTO[]>(`${this.urlBase}/GetAllLearningExperiences`, param);
+    return this.http.post<LearningExperienceDTO[]>(`${this.urlBase}/GetAllLearningExperiences`, param).pipe( 
+      tap({
+        next: () => this.loadingService.hide(),
+        error: (error) => {
+           this.loadingService.hide();
+           console.error('Errore calling GetAllLearningExperiences: ', error);
+        }
+      })
+    );
   } 
 }
