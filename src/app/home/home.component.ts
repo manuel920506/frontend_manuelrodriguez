@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';  
-import {LearningExperienceDTO} from '../models/api-client'
+import { Component, inject, OnInit } from '@angular/core';   
+import { LearningExperienceDTO, LearningExperienceListQueryDTO} from '../models/api-client'
+import { LearningExperienceService} from '../services/api.service'    
 
 @Component({
   selector: 'app-home',
@@ -11,8 +12,27 @@ import {LearningExperienceDTO} from '../models/api-client'
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent { 
-  _experienceList: LearningExperienceDTO[] = [];
+export class HomeComponent implements OnInit { 
+  experienceList: LearningExperienceDTO[] = [];
+  jobDescriptions: string[]=[];
+  apiService = inject(LearningExperienceService);
+  ngOnInit(){
+    const query = new LearningExperienceListQueryDTO({ 
+      sortExpression: 'title',
+      pageIndex: 1,
+      pageSize: 25
+    });
+    this.apiService.getAllLearningExperience(query).subscribe({
+      next: (data) => {
+        this.experienceList = data; 
+        console.log(data);
+      },
+      error: (error) => {
+        console.error('Error fetching items:', error);
+      }
+    });
+  }
+
   educationList = [
     {description: 'Master AZ-104-Microsoft Azure Administrator(Remote) , Neural Academy', data: '2024'},
     {description: 'Master Data Science(Remote) , Neural Academy', data: '2022 – 2023'},
@@ -20,23 +40,7 @@ export class HomeComponent {
     {description: 'Training c# .net, .net core 5, Angular 9(Remote)', data: '2020'},
     {description: 'Backend/Frontend Developer(Florence, Italy)', data: '2019-2020'},
     {description: 'Bachelor’s Degree(Las Tunas, Cuba)', data: '2010'}
-    ]  
-  experienceList = [
-    { title: 'Full Stack .NET Developer, Energent S.p.A. (Remote)', date: '2022 – Present', 
-      descriptions: [
-        {description: 'I developed several full stack pages that allow the end user to edit on the own, enhancing the business\' efficiency. '},
-        {description: 'I developed NUnit test, for every new component, increasing the codebase rigidity'},
-        {description: 'Improved productivity and end-user experience with the product thanks to routinely produced documentation. Refactoring.'}
-      ] 
-    },
-    { title: 'Full Stack .NET Developer, Onit Group srl', date: '2020 – 2022', 
-      descriptions: [
-        {description: 'I implemented an integration with automated systems, label printing and courier pick-up booking that helped the company save time and money.'},
-        {description: 'I analysed and implemented workflows in the application that allowed the operator to skip steps and produce documents more quickly.'},
-        {description: 'I created automatisms to help the customer optimise the inventory.'},
-      ]
-    },
-  ];
+    ]   
 
   skillList = [
     'ASP.NET Core',

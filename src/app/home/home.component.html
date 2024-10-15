@@ -13,12 +13,18 @@
 
     <div  class="space">
         <h2>Experience</h2>
-        @for (job of experienceList; track $index) {
-            <p class="title">{{ job.title }} - ({{ job.date }})</p>
-            @for (description of job.descriptions; track $index) {
-                <p>{{ description.description}}</p>
-            }   
-        }  
+        @if (experienceList && experienceList.length > 0) {
+            @for (job of experienceList; track $index) {
+                <p class="title">{{ job.title }}, {{job.company}} - ({{ job.from }} - {{ job.to ?? 'Present' }})</p>
+                @if (job && job.description) {
+                    @for (description of job.description!.split('.'); track $index) {
+                        <p>{{ description}}</p>
+                    }  
+                } 
+            } 
+        } @else {
+            <p>No experiences</p>
+        }
     </div> 
 
     <div  class="space">

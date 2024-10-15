@@ -348,15 +348,15 @@ function formatDate(d: Date) {
 }
 
 export class ApiException extends Error {
-    message: string;
+    override message: string;
     status: number;
     response: string;
     headers: { [key: string]: any; };
     result: any;
 
     constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
-        super();
-
+        super(message);
+        this.name = 'ApiException';
         this.message = message;
         this.status = status;
         this.response = response;

@@ -38,6 +38,8 @@ npm install nswag
 ## using nswag
  npx nswag run nswag.json
 
+## using api
+ng generate service services/api
 
 
 # Production
