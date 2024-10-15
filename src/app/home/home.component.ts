@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';   
-import { LearningExperienceDTO, LearningExperienceListQueryDTO} from '../models/api-client'
+import { LearningExperienceDTO } from '../models/api-client'
 import { LearningExperienceService} from '../services/api.service'    
 
 @Component({
@@ -16,13 +16,8 @@ export class HomeComponent implements OnInit {
   experienceList: LearningExperienceDTO[] = [];
   jobDescriptions: string[]=[];
   apiService = inject(LearningExperienceService);
-  ngOnInit(){
-    const query = new LearningExperienceListQueryDTO({ 
-      sortExpression: 'title',
-      pageIndex: 1,
-      pageSize: 25
-    });
-    this.apiService.getAllLearningExperience(query).subscribe({
+  ngOnInit(){ 
+    this.apiService.getAllLearningExperience().subscribe({
       next: (data) => {
         this.experienceList = data; 
         console.log(data);

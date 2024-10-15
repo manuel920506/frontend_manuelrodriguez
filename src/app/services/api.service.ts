@@ -1,4 +1,4 @@
-import { LearningExperienceDTO, LearningExperienceListQueryDTO } from '../models/api-client'; 
+import { LearningExperienceDTO } from '../models/api-client'; 
 import { environment } from '../../environments/environment'; 
 import { LoadingService } from '../loading/loading.service';
 import { HttpClient } from '@angular/common/http';  
@@ -17,29 +17,9 @@ export class LearningExperienceService {
     private loadingService: LoadingService
   ) {}
 
-  getAllLearningExperience(params: LearningExperienceListQueryDTO): Observable<LearningExperienceDTO[]> {
-    this.loadingService.show();
-    let param = new LearningExperienceListQueryDTO({
-        pageIndex: 1,
-        pageSize: 25
-    });
-    if (params.sortDirection) {
-       param.sortDirection = params.sortDirection;
-    }
-    if (params.sortExpression) {
-      param.sortExpression = params.sortExpression;
-    }
-    if (params.pageIndex !== undefined) {
-      param.pageIndex = params.pageIndex;
-    }
-    if (params.pageIndex !== undefined) {
-      param.pageIndex = params.pageIndex;
-    }
-    if (params.description) {
-      param.description = params.description;
-    } 
-
-    return this.http.post<LearningExperienceDTO[]>(`${this.urlBase}/GetAllLearningExperiences`, param).pipe( 
+  getAllLearningExperience(): Observable<LearningExperienceDTO[]> {
+    this.loadingService.show();  
+    return this.http.get<LearningExperienceDTO[]>(`${this.urlBase}/GetAllLearningExperiences`).pipe( 
       tap({
         next: () => this.loadingService.hide(),
         error: (error) => {

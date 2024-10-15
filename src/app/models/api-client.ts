@@ -19,20 +19,15 @@ export class MyApiClient {
     }
 
     /**
-     * @param body (optional) 
      * @return OK
      */
-    getAllLearningExperiences(body: LearningExperienceListQueryDTO | undefined): Promise<LearningExperienceDTO[]> {
+    getAllLearningExperiences(): Promise<LearningExperienceDTO[]> {
         let url_ = this.baseUrl + "/api/LearningExperience/GetAllLearningExperiences";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
-
         let options_: RequestInit = {
-            body: content_,
-            method: "POST",
+            method: "GET",
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "text/plain"
             }
         };
@@ -138,11 +133,11 @@ export class AddressDTO implements IAddressDTO {
 
     init(_data?: any) {
         if (_data) {
-            this.street = _data["Street"];
-            this.city = _data["City"];
-            this.state = _data["State"];
-            this.zipCode = _data["ZipCode"];
-            this.country = _data["Country"];
+            this.street = _data["street"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.zipCode = _data["zipCode"];
+            this.country = _data["country"];
         }
     }
 
@@ -155,11 +150,11 @@ export class AddressDTO implements IAddressDTO {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Street"] = this.street;
-        data["City"] = this.city;
-        data["State"] = this.state;
-        data["ZipCode"] = this.zipCode;
-        data["Country"] = this.country;
+        data["street"] = this.street;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["zipCode"] = this.zipCode;
+        data["country"] = this.country;
         return data;
     }
 }
@@ -193,14 +188,14 @@ export class LearningExperienceDTO implements ILearningExperienceDTO {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["Id"];
-            this.from = _data["From"] ? new Date(_data["From"].toString()) : <any>undefined;
-            this.to = _data["To"] ? new Date(_data["To"].toString()) : <any>undefined;
-            this.isRemote = _data["IsRemote"];
-            this.title = _data["Title"];
-            this.company = _data["Company"];
-            this.address = _data["Address"] ? AddressDTO.fromJS(_data["Address"]) : <any>undefined;
-            this.description = _data["Description"];
+            this.id = _data["id"];
+            this.from = _data["from"] ? new Date(_data["from"].toString()) : <any>undefined;
+            this.to = _data["to"] ? new Date(_data["to"].toString()) : <any>undefined;
+            this.isRemote = _data["isRemote"];
+            this.title = _data["title"];
+            this.company = _data["company"];
+            this.address = _data["address"] ? AddressDTO.fromJS(_data["address"]) : <any>undefined;
+            this.description = _data["description"];
         }
     }
 
@@ -213,14 +208,14 @@ export class LearningExperienceDTO implements ILearningExperienceDTO {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Id"] = this.id;
-        data["From"] = this.from ? this.from.toISOString() : <any>undefined;
-        data["To"] = this.to ? this.to.toISOString() : <any>undefined;
-        data["IsRemote"] = this.isRemote;
-        data["Title"] = this.title;
-        data["Company"] = this.company;
-        data["Address"] = this.address ? this.address.toJSON() : <any>undefined;
-        data["Description"] = this.description;
+        data["id"] = this.id;
+        data["from"] = this.from ? this.from.toISOString() : <any>undefined;
+        data["to"] = this.to ? this.to.toISOString() : <any>undefined;
+        data["isRemote"] = this.isRemote;
+        data["title"] = this.title;
+        data["company"] = this.company;
+        data["address"] = this.address ? this.address.toJSON() : <any>undefined;
+        data["description"] = this.description;
         return data;
     }
 }
@@ -234,63 +229,6 @@ export interface ILearningExperienceDTO {
     company?: string | undefined;
     address?: AddressDTO;
     description?: string | undefined;
-}
-
-export class LearningExperienceListQueryDTO implements ILearningExperienceListQueryDTO {
-    sortDirection?: SortDirection;
-    sortExpression?: string | undefined;
-    pageIndex?: number | undefined;
-    pageSize?: number | undefined;
-    description?: string | undefined;
-
-    constructor(data?: ILearningExperienceListQueryDTO) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.sortDirection = _data["SortDirection"];
-            this.sortExpression = _data["SortExpression"];
-            this.pageIndex = _data["PageIndex"];
-            this.pageSize = _data["PageSize"];
-            this.description = _data["Description"];
-        }
-    }
-
-    static fromJS(data: any): LearningExperienceListQueryDTO {
-        data = typeof data === 'object' ? data : {};
-        let result = new LearningExperienceListQueryDTO();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["SortDirection"] = this.sortDirection;
-        data["SortExpression"] = this.sortExpression;
-        data["PageIndex"] = this.pageIndex;
-        data["PageSize"] = this.pageSize;
-        data["Description"] = this.description;
-        return data;
-    }
-}
-
-export interface ILearningExperienceListQueryDTO {
-    sortDirection?: SortDirection;
-    sortExpression?: string | undefined;
-    pageIndex?: number | undefined;
-    pageSize?: number | undefined;
-    description?: string | undefined;
-}
-
-export enum SortDirection {
-    _0 = 0,
-    _1 = 1,
 }
 
 export class WeatherForecast implements IWeatherForecast {
@@ -310,10 +248,10 @@ export class WeatherForecast implements IWeatherForecast {
 
     init(_data?: any) {
         if (_data) {
-            this.date = _data["Date"] ? new Date(_data["Date"].toString()) : <any>undefined;
-            this.temperatureC = _data["TemperatureC"];
-            (<any>this).temperatureF = _data["TemperatureF"];
-            this.summary = _data["Summary"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.temperatureC = _data["temperatureC"];
+            (<any>this).temperatureF = _data["temperatureF"];
+            this.summary = _data["summary"];
         }
     }
 
@@ -326,10 +264,10 @@ export class WeatherForecast implements IWeatherForecast {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Date"] = this.date ? formatDate(this.date) : <any>undefined;
-        data["TemperatureC"] = this.temperatureC;
-        data["TemperatureF"] = this.temperatureF;
-        data["Summary"] = this.summary;
+        data["date"] = this.date ? formatDate(this.date) : <any>undefined;
+        data["temperatureC"] = this.temperatureC;
+        data["temperatureF"] = this.temperatureF;
+        data["summary"] = this.summary;
         return data;
     }
 }
