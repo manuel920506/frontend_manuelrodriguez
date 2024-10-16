@@ -73,8 +73,8 @@ export class MyApiClient {
     /**
      * @return OK
      */
-    getWeatherForecast(): Promise<WeatherForecast[]> {
-        let url_ = this.baseUrl + "/WeatherForecast";
+    getAllSkills(): Promise<SkillDTO[]> {
+        let url_ = this.baseUrl + "/api/Skill/GetAllSkills";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -85,11 +85,11 @@ export class MyApiClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetWeatherForecast(_response);
+            return this.processGetAllSkills(_response);
         });
     }
 
-    protected processGetWeatherForecast(response: Response): Promise<WeatherForecast[]> {
+    protected processGetAllSkills(response: Response): Promise<SkillDTO[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -99,19 +99,27 @@ export class MyApiClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(WeatherForecast.fromJS(item));
+                    result200!.push(SkillDTO.fromJS(item));
             }
             else {
                 result200 = <any>null;
             }
             return result200;
             });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = resultData400 !== undefined ? resultData400 : <any>null;
+    
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<WeatherForecast[]>(null as any);
+        return Promise.resolve<SkillDTO[]>(null as any);
     }
 }
 
@@ -231,13 +239,16 @@ export interface ILearningExperienceDTO {
     description?: string | undefined;
 }
 
-export class WeatherForecast implements IWeatherForecast {
-    date?: Date;
-    temperatureC?: number;
-    readonly temperatureF?: number;
-    summary?: string | undefined;
+export class SkillDTO implements ISkillDTO {
+    id?: number;
+    from?: Date;
+    to?: Date | undefined;
+    isRemote?: boolean;
+    description!: string;
+    pathProject?: string | undefined;
+    weight?: number;
 
-    constructor(data?: IWeatherForecast) {
+    constructor(data?: ISkillDTO) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -248,41 +259,44 @@ export class WeatherForecast implements IWeatherForecast {
 
     init(_data?: any) {
         if (_data) {
-            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.temperatureC = _data["temperatureC"];
-            (<any>this).temperatureF = _data["temperatureF"];
-            this.summary = _data["summary"];
+            this.id = _data["id"];
+            this.from = _data["from"] ? new Date(_data["from"].toString()) : <any>undefined;
+            this.to = _data["to"] ? new Date(_data["to"].toString()) : <any>undefined;
+            this.isRemote = _data["isRemote"];
+            this.description = _data["description"];
+            this.pathProject = _data["pathProject"];
+            this.weight = _data["weight"];
         }
     }
 
-    static fromJS(data: any): WeatherForecast {
+    static fromJS(data: any): SkillDTO {
         data = typeof data === 'object' ? data : {};
-        let result = new WeatherForecast();
+        let result = new SkillDTO();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["date"] = this.date ? formatDate(this.date) : <any>undefined;
-        data["temperatureC"] = this.temperatureC;
-        data["temperatureF"] = this.temperatureF;
-        data["summary"] = this.summary;
+        data["id"] = this.id;
+        data["from"] = this.from ? this.from.toISOString() : <any>undefined;
+        data["to"] = this.to ? this.to.toISOString() : <any>undefined;
+        data["isRemote"] = this.isRemote;
+        data["description"] = this.description;
+        data["pathProject"] = this.pathProject;
+        data["weight"] = this.weight;
         return data;
     }
 }
 
-export interface IWeatherForecast {
-    date?: Date;
-    temperatureC?: number;
-    temperatureF?: number;
-    summary?: string | undefined;
-}
-
-function formatDate(d: Date) {
-    return d.getFullYear() + '-' + 
-        (d.getMonth() < 9 ? ('0' + (d.getMonth()+1)) : (d.getMonth()+1)) + '-' +
-        (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
+export interface ISkillDTO {
+    id?: number;
+    from?: Date;
+    to?: Date | undefined;
+    isRemote?: boolean;
+    description: string;
+    pathProject?: string | undefined;
+    weight?: number;
 }
 
 export class ApiException extends Error {
