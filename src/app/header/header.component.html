@@ -1,13 +1,30 @@
 <mat-toolbar color="primary"> 
-  <a mat-button routerLink="/home">
+  <a mat-button routerLink="/home" matTooltip="Home">
     <mat-icon aria-label="Home">home</mat-icon>
   </a>  
-    <nav>  
-    
+    <nav>      
       <span class="spacer"></span>
-      <a mat-button (click)="login()">
-        <mat-icon aria-label="Login">login</mat-icon>
-      </a> 
+      <app-authorized role="admin">
+        <ng-container autorized>
+          <a mat-button>Edit About Me</a> 
+          <a mat-button>Edit Skills</a> 
+          <a mat-button>Edit Experiences</a> 
+          <a mat-button>Edit Educations</a>   
+          <a mat-button>Edit Certifications</a>   
+        </ng-container>
+      </app-authorized>
+      <app-authorized>
+        <ng-container loggedbutnotautorized>
+          <a mat-button>Certifications</a>    
+        </ng-container>
+      </app-authorized>   
+      <app-authorized>
+        <ng-container unauthorized>
+          <a mat-button (click)="onLogin()" matTooltip="Login">
+            <mat-icon aria-label="Login">login</mat-icon>
+          </a> 
+        </ng-container>
+      </app-authorized>       
     </nav>
 </mat-toolbar>
   

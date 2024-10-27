@@ -121,6 +121,90 @@ export class MyApiClient {
         }
         return Promise.resolve<SkillDTO[]>(null as any);
     }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    register(body: UserCredentialsDTO | undefined): Promise<AuthenticationResponseDTO> {
+        let url_ = this.baseUrl + "/api/users/register";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRegister(_response);
+        });
+    }
+
+    protected processRegister(response: Response): Promise<AuthenticationResponseDTO> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuthenticationResponseDTO.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AuthenticationResponseDTO>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    login(body: UserCredentialsDTO | undefined): Promise<AuthenticationResponseDTO> {
+        let url_ = this.baseUrl + "/api/users/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogin(_response);
+        });
+    }
+
+    protected processLogin(response: Response): Promise<AuthenticationResponseDTO> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuthenticationResponseDTO.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AuthenticationResponseDTO>(null as any);
+    }
 }
 
 export class AddressDTO implements IAddressDTO {
@@ -173,6 +257,46 @@ export interface IAddressDTO {
     state?: string | undefined;
     zipCode?: string | undefined;
     country?: string | undefined;
+}
+
+export class AuthenticationResponseDTO implements IAuthenticationResponseDTO {
+    token!: string | undefined;
+    expiration?: Date;
+
+    constructor(data?: IAuthenticationResponseDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.token = _data["token"];
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): AuthenticationResponseDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuthenticationResponseDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["token"] = this.token;
+        data["expiration"] = this.expiration ? this.expiration.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IAuthenticationResponseDTO {
+    token: string | undefined;
+    expiration?: Date;
 }
 
 export class LearningExperienceDTO implements ILearningExperienceDTO {
@@ -297,6 +421,46 @@ export interface ISkillDTO {
     description: string;
     pathProject?: string | undefined;
     weight?: number;
+}
+
+export class UserCredentialsDTO implements IUserCredentialsDTO {
+    email!: string;
+    password!: string;
+
+    constructor(data?: IUserCredentialsDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): UserCredentialsDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserCredentialsDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["password"] = this.password;
+        return data;
+    }
+}
+
+export interface IUserCredentialsDTO {
+    email: string;
+    password: string;
 }
 
 export class ApiException extends Error {

@@ -19,9 +19,10 @@
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
         </mat-form-field>
+        <button mat-button class="signup-link" (click)="onSignUp()" >Sign Up</button>
     </form>
 </div>
 <div mat-dialog-actions> 
-    <button  mat-raised-button color="primary" (click)="onLogin()" cdkFocusInitial [disabled]="!user || !password">Salva</button>
-    <button mat-flat-button mat-dialog-close>Chiudi</button>
+    <button  mat-raised-button color="primary" (click)="onLogin()" cdkFocusInitial [disabled]="!user || !password">Log In</button>
+    <button mat-flat-button mat-dialog-close (click)="onClose()">Chiudi</button>
 </div>

@@ -1,6 +1,17 @@
-<app-header></app-header>
-<main> 
-  <app-loading *ngIf="isLoading | async"></app-loading>
-  <router-outlet></router-outlet>
-</main>
-<app-footer></app-footer>
+<ng-container *ngIf="currentView === 'app'">
+  <app-header></app-header>
+  <main> 
+    <app-loading *ngIf="isLoading | async"></app-loading>
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer></app-footer>
+</ng-container> 
+
+<ng-container *ngIf="currentView === 'login'">
+  <app-white-page-login></app-white-page-login>
+</ng-container>
+
+<ng-container *ngIf="currentView === 'signup'">
+  <app-white-page-signup></app-white-page-signup>
+</ng-container> 
+

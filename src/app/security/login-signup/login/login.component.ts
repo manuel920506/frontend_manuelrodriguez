@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input'; // Importa MatInputModule 
-import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input'; 
+import { CommonModule } from '@angular/common'; 
+import { AppStateService } from '../../../app-state.service';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +24,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent { 
   user: string = '';
   password: string = '';
   hidePassword: boolean = true;
-  constructor(public dialogRef: MatDialogRef<LoginComponent>){
+  constructor(
+    public dialogRef: MatDialogRef<LoginComponent>,
+    private appState: AppStateService
+  ){
 
   }
 
@@ -36,10 +40,16 @@ export class LoginComponent {
   }
 
   onClose(): void {
+    this.appState.showApp(); 
     this.dialogRef.close(); 
   }
+
   onLogin(){
     console.log(`OnLogin -User: ${this.user}  password: ${this.password}`);
-    console.log('Pagina in costruzione, login non effettivamente sviluppato lato backend');
+  }
+
+  onSignUp(){ 
+    this.appState.showSignup();  
+    this.dialogRef.close(); 
   }
 }

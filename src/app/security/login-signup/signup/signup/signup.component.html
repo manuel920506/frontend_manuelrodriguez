@@ -1,0 +1,58 @@
+<div class="container">
+  <div mat-dialog-title class="title">
+    Sign Up
+  </div>
+  <div  mat-dialog-content> 
+    <form [formGroup]="signupForm" (ngSubmit)="onSignUp()" class="signup-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" placeholder="Enter your name" />
+        <mat-error *ngIf="signupForm.get('name')?.hasError('required') && signupForm.get('name')?.touched">
+          Name is required.
+        </mat-error>
+      </mat-form-field>
+    
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="Enter your email" />
+        <mat-error *ngIf="signupForm.get('email')?.hasError('required') && signupForm.get('email')?.touched">
+          Email is required.
+        </mat-error>
+        <mat-error *ngIf="signupForm.get('email')?.hasError('email') && signupForm.get('email')?.touched">
+          Invalid email format.
+        </mat-error>
+      </mat-form-field>
+    
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" placeholder="Enter your password" />
+        <mat-error *ngIf="signupForm.get('password')?.hasError('required') && signupForm.get('password')?.touched">
+          Password is required.
+        </mat-error>
+        <mat-error *ngIf="signupForm.get('password')?.hasError('minlength') && signupForm.get('password')?.touched">
+          Password must be at least 8 characters long.
+        </mat-error>
+      </mat-form-field>
+    
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput formControlName="confirmPassword" type="password" placeholder="Confirm your password" />
+        <mat-error *ngIf="checkErrorMatchingConfirmPassword()">
+          Passwords must match.
+        </mat-error>
+        <mat-error *ngIf="signupForm.get('confirmPassword')?.hasError('required') && signupForm.get('confirmPassword')?.touched">
+          Confirm Password is required.
+        </mat-error>
+      </mat-form-field>  
+
+      <div mat-dialog-actions> 
+        <button mat-raised-button color="primary" type="submit" 
+          [disabled]="signupForm.invalid"
+          [attr.cdkFocusInitial]="!signupForm.invalid ? '' : null">
+          Register
+        </button>
+        <button mat-flat-button mat-dialog-close (click)="onClose()">Chiudi</button>
+    </div> 
+    </form>
+  </div> 
+</div>
