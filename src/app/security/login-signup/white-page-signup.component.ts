@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'; 
 import { AppStateService } from '../../app-state.service';
-import { SignupComponent } from './signup/signup/signup.component';
+import { SignupComponent } from './signup/signup.component';
 
 @Component({
   selector: 'app-white-page-signup',

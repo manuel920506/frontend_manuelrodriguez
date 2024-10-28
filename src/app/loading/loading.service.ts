@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LoadingService {
-  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private loadingSubject = new BehaviorSubject<boolean>(true);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
   show() {

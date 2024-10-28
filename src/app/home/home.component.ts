@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';   
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';   
 import { LearningExperienceDTO, SkillDTO } from '../models/api-client'
 import { LearningExperienceService} from '../services/api.service'    
 
@@ -13,10 +13,13 @@ import { LearningExperienceService} from '../services/api.service'
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit { 
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private apiService: LearningExperienceService
+  ) {}
   experienceList: LearningExperienceDTO[] = [];
   skillList: SkillDTO[] = [];
   jobDescriptions: string[]=[];
-  apiService = inject(LearningExperienceService);
   ngOnInit(){ 
     this.loadLearningExperiences();
     this.loadSkills();    
@@ -26,6 +29,7 @@ export class HomeComponent implements OnInit {
     this.apiService.getAllLearningExperience().subscribe({
       next: (data) => {
         this.experienceList = data;  
+        this.cdr.detectChanges();
         console.log('loadLearningExperiences',data);
       },
       error: (error) => {
@@ -38,6 +42,7 @@ export class HomeComponent implements OnInit {
     this.apiService.getAllSkills().subscribe({
       next: (data) => {
         this.skillList = data;  
+        this.cdr.detectChanges();
         console.log('loadSkills',data);
       },
       error: (error) => {

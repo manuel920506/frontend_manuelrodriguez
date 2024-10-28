@@ -6,8 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';   
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
-import { AppStateService } from '../../../../app-state.service';
+import { MatIcon } from '@angular/material/icon'; 
+import { AppStateService } from '../../../app-state.service';
 
 @Component({
   selector: 'app-signup',
@@ -57,6 +57,7 @@ export class SignupComponent {
     const touched = !!this.signupForm.get('confirmPassword')?.touched;
     const confirmPasswordFilled = !!this.signupForm.get('confirmPassword')?.hasError('required');
     var  result =  notMatching && touched && !confirmPasswordFilled;
+    console.log('checkErrorMatchingConfirmPassword: ',result);
     return result;
   }
   
