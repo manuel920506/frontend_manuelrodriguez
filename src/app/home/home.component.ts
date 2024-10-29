@@ -20,9 +20,25 @@ export class HomeComponent implements OnInit {
   experienceList: LearningExperienceDTO[] = [];
   skillList: SkillDTO[] = [];
   jobDescriptions: string[]=[];
+  descriptionAboutMeCodeFilter : string = 'DescriptionAboutMe';
+  descriptionAboutMe: string = '';
   ngOnInit(){ 
+    this.loadDescriptionAboutMe();
     this.loadLearningExperiences();
     this.loadSkills();    
+  }
+
+  loadDescriptionAboutMe(){
+    this.apiService.GetCommonDataByCode(this.descriptionAboutMeCodeFilter).subscribe({
+      next: (data) => {
+        this.descriptionAboutMe = data.description;  
+        this.cdr.detectChanges();
+        console.log('loadDescriptionAboutMe',data);
+      },
+      error: (error) => {
+        console.error('Error fetching items:', error);
+      }
+    });
   }
 
   loadLearningExperiences(){

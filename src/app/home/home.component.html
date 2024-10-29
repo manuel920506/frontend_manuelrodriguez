@@ -1,9 +1,9 @@
 <div class="container">
     <div  class="space">
         <h2>About Me</h2>
-        <p>
-            I'm a passionate full stack web developer focusing on creating clean, modern, and user-friendly websites...
-        </p> 
+        @if (descriptionAboutMe) {
+            <p>{{descriptionAboutMe}}</p>  
+        }
     </div> 
 
     <div  class="space">

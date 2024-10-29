@@ -19,6 +19,113 @@ export class MyApiClient {
     }
 
     /**
+     * @param searchTerm (optional) 
+     * @return OK
+     */
+    getCommonDataByDescriptionLikeMode(searchTerm: string | undefined): Promise<CommonDataDTO[]> {
+        let url_ = this.baseUrl + "/api/CommonData/GetCommonDataByDescriptionLikeMode?";
+        if (searchTerm === null)
+            throw new Error("The parameter 'searchTerm' cannot be null.");
+        else if (searchTerm !== undefined)
+            url_ += "searchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCommonDataByDescriptionLikeMode(_response);
+        });
+    }
+
+    protected processGetCommonDataByDescriptionLikeMode(response: Response): Promise<CommonDataDTO[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CommonDataDTO.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = resultData400 !== undefined ? resultData400 : <any>null;
+    
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommonDataDTO[]>(null as any);
+    }
+
+    /**
+     * @param code (optional) 
+     * @return OK
+     */
+    getCommonDataByCode(code: string | undefined): Promise<CommonDataDTO> {
+        let url_ = this.baseUrl + "/api/CommonData/GetCommonDataByCode?";
+        if (code === null)
+            throw new Error("The parameter 'code' cannot be null.");
+        else if (code !== undefined)
+            url_ += "code=" + encodeURIComponent("" + code) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCommonDataByCode(_response);
+        });
+    }
+
+    protected processGetCommonDataByCode(response: Response): Promise<CommonDataDTO> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommonDataDTO.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = resultData400 !== undefined ? resultData400 : <any>null;
+    
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommonDataDTO>(null as any);
+    }
+
+    /**
      * @return OK
      */
     getAllLearningExperiences(): Promise<LearningExperienceDTO[]> {
@@ -299,6 +406,62 @@ export interface IAuthenticationResponseDTO {
     expiration?: Date;
 }
 
+export class CommonDataDTO implements ICommonDataDTO {
+    id?: number;
+    from?: Date;
+    to?: Date | undefined;
+    isRemote?: boolean;
+    code!: string;
+    description!: string;
+
+    constructor(data?: ICommonDataDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.from = _data["from"] ? new Date(_data["from"].toString()) : <any>undefined;
+            this.to = _data["to"] ? new Date(_data["to"].toString()) : <any>undefined;
+            this.isRemote = _data["isRemote"];
+            this.code = _data["code"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): CommonDataDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new CommonDataDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["from"] = this.from ? this.from.toISOString() : <any>undefined;
+        data["to"] = this.to ? this.to.toISOString() : <any>undefined;
+        data["isRemote"] = this.isRemote;
+        data["code"] = this.code;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface ICommonDataDTO {
+    id?: number;
+    from?: Date;
+    to?: Date | undefined;
+    isRemote?: boolean;
+    code: string;
+    description: string;
+}
+
 export class LearningExperienceDTO implements ILearningExperienceDTO {
     id?: number;
     from?: Date;
@@ -473,6 +636,7 @@ export class ApiException extends Error {
     constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
         super(message);
         this.name = 'ApiException';
+
         this.message = message;
         this.status = status;
         this.response = response;
