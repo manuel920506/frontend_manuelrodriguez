@@ -59,7 +59,6 @@ export class HomeComponent implements OnInit {
       next: (data) => {
         this.educationList = data;  
         this.cdr.detectChanges();
-        console.log('loadEducations',data);
       },
       error: (error) => {
         console.error('Error fetching items:', error);
