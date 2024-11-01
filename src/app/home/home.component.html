@@ -1,19 +1,21 @@
 <div class="container">
     <div  class="space">
-        <h2>About Me</h2>
         @if (descriptionAboutMe) {
+            <h2>About Me</h2>
             <p>{{descriptionAboutMe}}</p>  
         }
     </div> 
 
     <div  class="space">
-        <h2>Skills</h2>
-        <p>{{ displaySkillList()}}</p>  
+        @if(skillList.length > 0){
+            <h2>Skills</h2>
+            <p>{{ displaySkillList()}}</p>
+        }  
     </div> 
 
     <div  class="space">
-        <h2>Experience</h2>
-        @if (experienceList && experienceList.length > 0) {
+        @if (experienceList.length > 0) {
+            <h2>Experience</h2>
             @for (job of experienceList; track $index) {
                 <p class="title">{{ job.title }}, {{job.company}} - ({{ job.from | date: 'dd/MM/yyyy' }} - {{ job.to ? (job.to | date: 'dd/MM/yyyy') : 'Present' }})</p>
                 @if (job && job.description) {
@@ -26,9 +28,11 @@
     </div> 
 
     <div  class="space">
-        <h2>Education</h2>
-        @for (education of educationList; track $index) {
-            <p>{{education.description}} - {{education.data}}</p>
-        }  
+        @if (educationList.length > 0) {
+            <h2>Education</h2>
+            @for (education of educationList; track $index) {
+                <p>{{education.description}} - {{education.schoolName}} - ({{ education.from | date: 'dd/MM/yyyy' }} - {{ education.to ? (education.to | date: 'dd/MM/yyyy') : 'Present' }}) - {{education.isRemote ? '(Remote)' : '(In-Person)'}}</p>
+            } 
+        } 
     </div> 
 </div>

@@ -1,4 +1,4 @@
-import { CommonDataDTO, LearningExperienceDTO, SkillDTO } from '../models/api-client';  
+import { CommonDataDTO, EducationDTO, LearningExperienceDTO, SkillDTO } from '../models/api-client';  
 import { LoadingService } from '../loading/loading.service';
 import { HttpClient, HttpParams } from '@angular/common/http';  
 import { Injectable } from '@angular/core'; 
@@ -57,6 +57,21 @@ export class LearningExperienceService {
         },
         error: (error) => { 
            console.error('Errore calling GetCommonDataByCode: ', error);
+        }
+      }),
+      finalize(() => this.loadingService.hide())
+    );
+  } 
+
+  getAllEducations(): Observable<EducationDTO[]> {
+    this.loadingService.show();  
+    return this.http.get<EducationDTO[]>(PATHS.Educations).pipe( 
+      tap({
+        next: () => {
+          // ...
+        },
+        error: (error) => { 
+           console.error('Errore calling getAllEducations: ', error);
         }
       }),
       finalize(() => this.loadingService.hide())

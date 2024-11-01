@@ -128,6 +128,58 @@ export class MyApiClient {
     /**
      * @return OK
      */
+    getAllEducations(): Promise<EducationDTO[]> {
+        let url_ = this.baseUrl + "/api/Education/GetAllEducations";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllEducations(_response);
+        });
+    }
+
+    protected processGetAllEducations(response: Response): Promise<EducationDTO[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EducationDTO.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = resultData400 !== undefined ? resultData400 : <any>null;
+    
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<EducationDTO[]>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     getAllLearningExperiences(): Promise<LearningExperienceDTO[]> {
         let url_ = this.baseUrl + "/api/LearningExperience/GetAllLearningExperiences";
         url_ = url_.replace(/[?&]$/, "");
@@ -460,6 +512,66 @@ export interface ICommonDataDTO {
     isRemote?: boolean;
     code: string;
     description: string;
+}
+
+export class EducationDTO implements IEducationDTO {
+    id?: number;
+    from?: Date;
+    to?: Date | undefined;
+    isRemote?: boolean;
+    description!: string;
+    schoolName!: string;
+    schoolAddress!: string;
+
+    constructor(data?: IEducationDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.from = _data["from"] ? new Date(_data["from"].toString()) : <any>undefined;
+            this.to = _data["to"] ? new Date(_data["to"].toString()) : <any>undefined;
+            this.isRemote = _data["isRemote"];
+            this.description = _data["description"];
+            this.schoolName = _data["schoolName"];
+            this.schoolAddress = _data["schoolAddress"];
+        }
+    }
+
+    static fromJS(data: any): EducationDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new EducationDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["from"] = this.from ? this.from.toISOString() : <any>undefined;
+        data["to"] = this.to ? this.to.toISOString() : <any>undefined;
+        data["isRemote"] = this.isRemote;
+        data["description"] = this.description;
+        data["schoolName"] = this.schoolName;
+        data["schoolAddress"] = this.schoolAddress;
+        return data;
+    }
+}
+
+export interface IEducationDTO {
+    id?: number;
+    from?: Date;
+    to?: Date | undefined;
+    isRemote?: boolean;
+    description: string;
+    schoolName: string;
+    schoolAddress: string;
 }
 
 export class LearningExperienceDTO implements ILearningExperienceDTO {
