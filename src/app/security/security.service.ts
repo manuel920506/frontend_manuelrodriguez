@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { AuthenticationResponseDTO, UserCredentialsDTO } from '../models/api-client';
 import { Observable, tap } from 'rxjs';
+import { ConfigService } from '../services/config.service';
 
 
 @Injectable({
@@ -11,22 +11,27 @@ import { Observable, tap } from 'rxjs';
 export class SecurityService {
 
   constructor(
-    private httpClient : HttpClient
+    private httpClient : HttpClient,
+    private configService: ConfigService
   ) { }
-
-  private urlBase = environment.apiURL + '/users'; 
+ 
+ 
   private readonly tokenKey = 'token';
   private readonly expirationKey = 'expiration-key';
+
+  getUrlBase(){
+    return this.configService.get('apiURL') + '/users'; 
+  }
   
   register(userCredentials: UserCredentialsDTO) : Observable<AuthenticationResponseDTO>{
-    return this.httpClient.post<AuthenticationResponseDTO>(`${this.urlBase}/register`, userCredentials)
+    return this.httpClient.post<AuthenticationResponseDTO>(`${this.getUrlBase()}/register`, userCredentials)
     .pipe(
       tap(authenticationResponse => this.saveToken(authenticationResponse))
     )
   }
 
   login(userCredentials: UserCredentialsDTO) : Observable<AuthenticationResponseDTO>{
-    return this.httpClient.post<AuthenticationResponseDTO>(`${this.urlBase}/login`, userCredentials)
+    return this.httpClient.post<AuthenticationResponseDTO>(`${this.getUrlBase()}/login`, userCredentials)
     .pipe(
       tap(authenticationResponse => this.saveToken(authenticationResponse))
     )
