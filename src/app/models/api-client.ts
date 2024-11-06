@@ -126,10 +126,15 @@ export class MyApiClient {
     }
 
     /**
+     * @param code (optional) 
      * @return OK
      */
-    getAllEducations(): Promise<EducationDTO[]> {
-        let url_ = this.baseUrl + "/api/Education/GetAllEducations";
+    getInfoCV(code: string | undefined): Promise<InfoCvDTO> {
+        let url_ = this.baseUrl + "/api/CommonData/GetInfoCV?";
+        if (code === null)
+            throw new Error("The parameter 'code' cannot be null.");
+        else if (code !== undefined)
+            url_ += "code=" + encodeURIComponent("" + code) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -140,25 +145,18 @@ export class MyApiClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetAllEducations(_response);
+            return this.processGetInfoCV(_response);
         });
     }
 
-    protected processGetAllEducations(response: Response): Promise<EducationDTO[]> {
+    protected processGetInfoCV(response: Response): Promise<InfoCvDTO> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(EducationDTO.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = InfoCvDTO.fromJS(resultData200);
             return result200;
             });
         } else if (status === 400) {
@@ -174,111 +172,7 @@ export class MyApiClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<EducationDTO[]>(null as any);
-    }
-
-    /**
-     * @return OK
-     */
-    getAllLearningExperiences(): Promise<LearningExperienceDTO[]> {
-        let url_ = this.baseUrl + "/api/LearningExperience/GetAllLearningExperiences";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "text/plain"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetAllLearningExperiences(_response);
-        });
-    }
-
-    protected processGetAllLearningExperiences(response: Response): Promise<LearningExperienceDTO[]> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(LearningExperienceDTO.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result400 = resultData400 !== undefined ? resultData400 : <any>null;
-    
-            return throwException("Bad Request", status, _responseText, _headers, result400);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<LearningExperienceDTO[]>(null as any);
-    }
-
-    /**
-     * @return OK
-     */
-    getAllSkills(): Promise<SkillDTO[]> {
-        let url_ = this.baseUrl + "/api/Skill/GetAllSkills";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "text/plain"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetAllSkills(_response);
-        });
-    }
-
-    protected processGetAllSkills(response: Response): Promise<SkillDTO[]> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SkillDTO.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result400 = resultData400 !== undefined ? resultData400 : <any>null;
-    
-            return throwException("Bad Request", status, _responseText, _headers, result400);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<SkillDTO[]>(null as any);
+        return Promise.resolve<InfoCvDTO>(null as any);
     }
 
     /**
@@ -572,6 +466,78 @@ export interface IEducationDTO {
     description: string;
     schoolName: string;
     schoolAddress: string;
+}
+
+export class InfoCvDTO implements IInfoCvDTO {
+    commonDataDTO?: CommonDataDTO;
+    educationsDTO?: EducationDTO[] | undefined;
+    learningExperiencesDTO?: LearningExperienceDTO[] | undefined;
+    skillsDTO?: SkillDTO[] | undefined;
+
+    constructor(data?: IInfoCvDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.commonDataDTO = _data["commonDataDTO"] ? CommonDataDTO.fromJS(_data["commonDataDTO"]) : <any>undefined;
+            if (Array.isArray(_data["educationsDTO"])) {
+                this.educationsDTO = [] as any;
+                for (let item of _data["educationsDTO"])
+                    this.educationsDTO!.push(EducationDTO.fromJS(item));
+            }
+            if (Array.isArray(_data["learningExperiencesDTO"])) {
+                this.learningExperiencesDTO = [] as any;
+                for (let item of _data["learningExperiencesDTO"])
+                    this.learningExperiencesDTO!.push(LearningExperienceDTO.fromJS(item));
+            }
+            if (Array.isArray(_data["skillsDTO"])) {
+                this.skillsDTO = [] as any;
+                for (let item of _data["skillsDTO"])
+                    this.skillsDTO!.push(SkillDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): InfoCvDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new InfoCvDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["commonDataDTO"] = this.commonDataDTO ? this.commonDataDTO.toJSON() : <any>undefined;
+        if (Array.isArray(this.educationsDTO)) {
+            data["educationsDTO"] = [];
+            for (let item of this.educationsDTO)
+                data["educationsDTO"].push(item.toJSON());
+        }
+        if (Array.isArray(this.learningExperiencesDTO)) {
+            data["learningExperiencesDTO"] = [];
+            for (let item of this.learningExperiencesDTO)
+                data["learningExperiencesDTO"].push(item.toJSON());
+        }
+        if (Array.isArray(this.skillsDTO)) {
+            data["skillsDTO"] = [];
+            for (let item of this.skillsDTO)
+                data["skillsDTO"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IInfoCvDTO {
+    commonDataDTO?: CommonDataDTO;
+    educationsDTO?: EducationDTO[] | undefined;
+    learningExperiencesDTO?: LearningExperienceDTO[] | undefined;
+    skillsDTO?: SkillDTO[] | undefined;
 }
 
 export class LearningExperienceDTO implements ILearningExperienceDTO {

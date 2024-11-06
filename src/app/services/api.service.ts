@@ -1,4 +1,4 @@
-import { CommonDataDTO, EducationDTO, LearningExperienceDTO, SkillDTO } from '../models/api-client';  
+import { CommonDataDTO, EducationDTO, InfoCvDTO, LearningExperienceDTO, SkillDTO } from '../models/api-client';  
 import { LoadingService } from '../loading/loading.service';
 import { HttpClient, HttpParams } from '@angular/common/http';  
 import { Injectable } from '@angular/core'; 
@@ -18,36 +18,6 @@ export class LearningExperienceService {
   ) {}
  
 
-  getAllLearningExperience(): Observable<LearningExperienceDTO[]> {
-    this.loadingService.show();  
-    return this.http.get<LearningExperienceDTO[]>(this.apiPathsService.getPaths().LearningExperiences).pipe( 
-      tap({
-        next: () => {
-          // ...
-        },
-        error: (error) => { 
-           console.error('Errore calling GetAllLearningExperiences: ', error);
-        }
-      }),
-      finalize(() => this.loadingService.hide())
-    );
-  } 
-
-  getAllSkills(): Observable<SkillDTO[]> {
-    this.loadingService.show();  
-    return this.http.get<SkillDTO[]>(this.apiPathsService.getPaths().Skills).pipe( 
-      tap({
-        next: () => {
-          // ...
-        },
-        error: (error) => { 
-           console.error('Errore calling getAllSkills: ', error);
-        }
-      }),
-      finalize(() => this.loadingService.hide())
-    );
-  } 
-
   GetCommonDataByCode(code : string):  Observable<CommonDataDTO> {
     this.loadingService.show();  
     const params = new HttpParams().set('code', code); 
@@ -64,15 +34,16 @@ export class LearningExperienceService {
     );
   } 
 
-  getAllEducations(): Observable<EducationDTO[]> {
+  GetInfoCV(code : string): Observable<InfoCvDTO> {
     this.loadingService.show();  
-    return this.http.get<EducationDTO[]>(this.apiPathsService.getPaths().Educations).pipe( 
+    const params = new HttpParams().set('code', code); 
+    return this.http.get<InfoCvDTO>(this.apiPathsService.getPaths().InfoCV, { params }).pipe( 
       tap({
         next: () => {
           // ...
         },
         error: (error) => { 
-           console.error('Errore calling getAllEducations: ', error);
+           console.error('Errore calling GetInfoCV: ', error);
         }
       }),
       finalize(() => this.loadingService.hide())

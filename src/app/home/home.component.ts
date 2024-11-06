@@ -24,52 +24,16 @@ export class HomeComponent implements OnInit {
   descriptionAboutMeCodeFilter : string = 'DescriptionAboutMe';
   descriptionAboutMe: string = '';
   ngOnInit(){ 
-    this.loadDescriptionAboutMe();
-    this.loadLearningExperiences();
-    this.loadEducations();
-    this.loadSkills();    
+    this.GetInfoCV();   
   }
 
-  loadDescriptionAboutMe(){
-    this.apiService.GetCommonDataByCode(this.descriptionAboutMeCodeFilter).subscribe({
+  GetInfoCV(){
+    this.apiService.GetInfoCV(this.descriptionAboutMeCodeFilter).subscribe({
       next: (data) => {
-        this.descriptionAboutMe = data.description;  
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error fetching items:', error);
-      }
-    });
-  }
-
-  loadLearningExperiences(){
-    this.apiService.getAllLearningExperience().subscribe({
-      next: (data) => {
-        this.experienceList = data;  
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error fetching items:', error);
-      }
-    });
-  }
-
-  loadEducations(){
-    this.apiService.getAllEducations().subscribe({
-      next: (data) => {
-        this.educationList = data;  
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error fetching items:', error);
-      }
-    });
-  }
-
-  loadSkills(){
-    this.apiService.getAllSkills().subscribe({
-      next: (data) => {
-        this.skillList = data;  
+        this.descriptionAboutMe = (data.commonDataDTO &&  data.commonDataDTO.description) ? data.commonDataDTO.description : '';  
+        this.experienceList = data.learningExperiencesDTO ?? [];
+        this.educationList = data.educationsDTO ?? [];
+        this.skillList = data.skillsDTO ?? [];
         this.cdr.detectChanges();
       },
       error: (error) => {

@@ -15,9 +15,7 @@ export class ApiPathsService {
       apiURL = this.configService.get('production').apiURL;
     }
     return {
-      LearningExperiences: `${apiURL}/LearningExperience/GetAllLearningExperiences`,
-      Skills: `${apiURL}/Skill/GetAllSkills`,
-      Educations: `${apiURL}/Education/GetAllEducations`,
+      InfoCV: `${apiURL}/CommonData/GetInfoCV`,
       CommonDataByCode: `${apiURL}/CommonData/GetCommonDataByCode`,
       CommonDataByDescriptionLikeMode: `${apiURL}/CommonData/GetCommonDataByDescriptionLikeMode`
     };
