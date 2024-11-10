@@ -2,14 +2,17 @@
     Login
 </div>
 <div  mat-dialog-content>
-    <form>
+    <form [formGroup]="loginForm">
         <mat-form-field appearance="fill">
             <mat-label>User</mat-label>
-            <input matInput [(ngModel)]="user" name="user">
+            <input matInput formControlName="email" type="email" placeholder="Enter your email" />
+            <mat-error *ngIf="email?.hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="email?.hasError('email')">Invalid email format</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Password</mat-label>
-            <input matInput [(ngModel)]="password" name="password" [type]="hidePassword ? 'password' : 'text'">
+            <input matInput formControlName="password" type="password" placeholder="Enter your password" />
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required</mat-error>
             <button 
                 mat-icon-button 
                 matSuffix 
@@ -20,9 +23,15 @@
           </button>
         </mat-form-field>
         <button mat-button class="signup-link" (click)="onSignUp()" >Sign Up</button>
+        <mat-error *ngIf="errors && errors.length > 0">
+            <ng-container *ngFor="let error of errors">
+                {{ error }}
+              </ng-container>
+        </mat-error>
     </form>
 </div>
+
 <div mat-dialog-actions> 
-    <button  mat-raised-button color="primary" (click)="onLogin()" cdkFocusInitial [disabled]="!user || !password">Log In</button>
+    <button  mat-raised-button color="primary" (click)="onLogin()" cdkFocusInitial [disabled]="loginForm.invalid">Log In</button>
     <button mat-flat-button mat-dialog-close (click)="onClose()">Chiudi</button>
 </div>

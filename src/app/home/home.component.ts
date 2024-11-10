@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   GetInfoCV(){
     this.apiService.GetInfoCV(this.descriptionAboutMeCodeFilter).subscribe({
       next: (data) => {
-        this.descriptionAboutMe = (data.commonDataDTO &&  data.commonDataDTO.description) ? data.commonDataDTO.description : '';  
+        this.descriptionAboutMe = (data && data.commonDataDTO &&  data.commonDataDTO.description) ? data.commonDataDTO.description : '';  
         this.experienceList = data.learningExperiencesDTO ?? [];
         this.educationList = data.educationsDTO ?? [];
         this.skillList = data.skillsDTO ?? [];

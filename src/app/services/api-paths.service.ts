@@ -15,6 +15,8 @@ export class ApiPathsService {
       apiURL = this.configService.get('production').apiURL;
     }
     return {
+      Login: `${apiURL}/users/login`,
+      Register: `${apiURL}/users/register`,
       InfoCV: `${apiURL}/CommonData/GetInfoCV`,
       CommonDataByCode: `${apiURL}/CommonData/GetCommonDataByCode`,
       CommonDataByDescriptionLikeMode: `${apiURL}/CommonData/GetCommonDataByDescriptionLikeMode`

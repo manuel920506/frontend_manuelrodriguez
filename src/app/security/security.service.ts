@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthenticationResponseDTO, UserCredentialsDTO } from '../models/api-client';
-import { Observable, tap } from 'rxjs';
+import { finalize, Observable, tap } from 'rxjs';
 import { ConfigService } from '../services/config.service';
+import { LoadingService } from '../loading/loading.service';
+import { ApiPathsService } from '../services/api-paths.service';
 
 
 @Injectable({
@@ -12,7 +14,9 @@ export class SecurityService {
 
   constructor(
     private httpClient : HttpClient,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private loadingService: LoadingService,    
+    private apiPathsService: ApiPathsService
   ) { }
  
  
@@ -31,11 +35,20 @@ export class SecurityService {
   }
 
   login(userCredentials: UserCredentialsDTO) : Observable<AuthenticationResponseDTO>{
-    return this.httpClient.post<AuthenticationResponseDTO>(`${this.getUrlBase()}/login`, userCredentials)
+    this.loadingService.show();  
+    return this.httpClient.post<AuthenticationResponseDTO>(this.apiPathsService.getPaths().Login, userCredentials)
     .pipe(
-      tap(authenticationResponse => this.saveToken(authenticationResponse))
+      tap({
+          next: (authenticationResponse: AuthenticationResponseDTO) => {
+           this.saveToken(authenticationResponse)
+          },
+          error: (error) => { 
+             console.error('Errore calling GetCommonDataByCode: ', error);
+          }
+        }),
+        finalize(() => this.loadingService.hide())
     )
-  }
+  } 
 
   getFieldJWT(field: string): string{
     const token = localStorage.getItem(this.tokenKey);

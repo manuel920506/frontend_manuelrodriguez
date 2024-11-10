@@ -24,7 +24,7 @@ export class WhitePageLoginComponent implements OnInit {
   openLoginDialog(): void {
     this.dialog.open(LoginComponent, {  
       width: '400px',
-      height: '370px',
+      height: '400px',
       maxHeight: '800px', 
       disableClose: true 
     }); 

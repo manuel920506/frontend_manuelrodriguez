@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';   
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon'; 
 import { AppStateService } from '../../../app-state.service';
 
 @Component({
@@ -19,8 +18,7 @@ import { AppStateService } from '../../../app-state.service';
     MatButtonModule,
     CommonModule, 
     MatDialogModule, 
-    FormsModule,  
-    MatIcon, 
+    FormsModule
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
